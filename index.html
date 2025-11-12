@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projek Kriptografi Kelompok 4</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0f1f;
+      --bg-2:#111827;
+      --panel:#0b1220;
+      --accent:#3b82f6;
+      --accent-2:#10b981;
+      --text:#e2e8f0;
+      --muted:#94a3b8;
+      --radius:14px;
+      --shadow:0 10px 30px rgba(0,0,0,.4);
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Inter",system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background-color:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      background-image:
+        radial-gradient(circle at 80% 20%,rgba(59,130,246,0.15),transparent 60%),
+        radial-gradient(circle at 15% 85%,rgba(16,185,129,0.12),transparent 60%),
+        linear-gradient(160deg,#0a0f1f 0%,#0a0e1a 100%);
+    }
+    body::before{
+      content:"";position:fixed;inset:0;
+      background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+      background-size:40px 40px;z-index:0;
+    }
+    section{position:relative;z-index:1}
+
+    /* ==== HOME ==== */
+    .home-wrapper{
+      display:flex;align-items:center;justify-content:center;
+      min-height:100vh;padding:24px;
+    }
+    .home-container{
+      background:rgba(17,24,39,0.75);
+      border:1px solid rgba(148,163,184,0.2);
+      backdrop-filter:blur(14px);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:60px 50px;
+      max-width:640px;width:100%;
+      text-align:center;
+    }
+    .home-container h1{
+      font-size:34px;font-weight:800;color:#f8fafc;margin-bottom:6px;
+    }
+    .home-container h2{
+      font-size:20px;font-weight:700;color:#a5b4fc;margin-bottom:22px;
+    }
+    .home-container p.name{
+      font-size:16px;color:#cbd5e1;margin:4px 0;
+    }
+    .home-desc{
+      margin:32px 0 24px;
+      color:#cbd5e1;
+      font-size:17px;
+    }
+    .button-container{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
+    }
+    .choice-button{
+      padding:14px 28px;
+      border:1px solid #334155;
+      background:transparent;
+      border-radius:var(--radius);
+      font-weight:600;
+      font-size:16px;
+      color:#f8fafc;
+      transition:.2s;
+      min-width:180px;
+    }
+    .choice-button:hover{
+      background:#1e293b;
+      border-color:#475569;
+    }
+    .choice-button.secondary:hover{
+      background:#0f2d24;
+      border-color:#2dd4bf;
+    }
+    .footer-note{
+      margin-top:36px;
+      color:#64748b;
+      font-size:14px;
+    }
+    .footer-note span{
+      display:inline-block;width:8px;height:8px;border-radius:50%;
+      background:#6366f1;margin-left:6px;animation:pulse 1.8s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+    /* ==== PAGES ==== */
+    .page-wrapper{display:none;padding:28px 20px 40px;}
+    .page-header{
+      display:flex;justify-content:space-between;align-items:center;
+      max-width:1200px;margin:0 auto 24px;
+    }
+    .page-header h1{font-size:26px;font-weight:800;color:#dbeafe}
+    .back-button{
+      padding:10px 16px;
+      border:1px solid #334155;
+      background:#0b1220;
+      color:#e2e8f0;
+      border-radius:10px;
+      font-weight:700;
+      transition:.2s;
+    }
+    .back-button:hover{background:#1e293b;border-color:#475569}
+
+    .container{
+      max-width:1200px;margin:auto;display:grid;gap:24px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:960px){.container{grid-template-columns:4fr 6fr}}
+
+    .card{
+      background:linear-gradient(180deg,#0b1220,#101929);
+      border:1px solid #1f2937;
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:22px;display:flex;flex-direction:column;gap:14px;
+    }
+    .card h2{font-size:18px;font-weight:800;color:#cbd5e1;margin-bottom:6px}
+    label{display:block;font-size:13px;font-weight:700;color:#9fb2c7;margin:8px 0 6px}
+    textarea,input,select{
+      width:100%;padding:12px;border:1px solid #334155;border-radius:12px;
+      background:#0a0f1e;color:#f8fafc;font-size:15px;outline:none;
+    }
+    textarea:focus,input:focus,select:focus{border-color:#3b82f6}
+    textarea{min-height:110px;resize:vertical}
+
+    .btn{
+      padding:10px 14px;border:1px solid #334155;background:#0b1220;
+      color:#e2e8f0;border-radius:10px;font-weight:700;
+      transition:.2s;display:inline-flex;align-items:center;gap:8px;
+    }
+    .btn:hover{background:#1e293b;border-color:#475569}
+    .btn.secondary:hover{background:#2a2d35;border-color:#475569}
+    .btn.file:hover{background:#10231d;border-color:#3e8c7d}
+
+    .result-box{
+      border:1px solid #1f2937;
+      background:linear-gradient(180deg,#0a1222,#0b162a);
+      color:#eef2ff;border-radius:16px;padding:16px;
+    }
+    .result-title{font-weight:800;margin-bottom:6px}
+    .result-text{font-family:var(--mono);font-size:17px;line-height:1.6;word-wrap:anywhere}
+    .muted{font-size:13px;color:#9ca3af}
+    table{width:100%;border-collapse:collapse;font-size:14px;background:#0b1220;color:#e5e7eb}
+    thead tr{background:#0e172a}
+    th,td{border:1px solid #1f2937;padding:8px 10px;text-align:left}
+    .grid-matrix{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+    .grid-matrix div{
+      border:1px solid #1f2937;border-radius:10px;padding:10px;text-align:center;
+      background:#0e172a;color:#e5e7eb;font-weight:800
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==== HOME ==== -->
+  <section id="pageHome" class="home-wrapper">
+    <div class="home-container fade show">
+      <h1>Projek Kriptografi</h1>
+      <h2>Kelompok 4</h2>
+      <p class="name">Al Mutawakkil Paletari</p>
+      <p class="name">Muh. Yusri</p>
+      <p class="name">Muh. Farid Yusuf</p>
+      <p class="name">Aliya Shafira</p>
+      <p class="name">Hana Awaliyah</p>
+
+      <p class="home-desc">Algoritma yang kami pilih untuk proses <b>enkripsi</b> dan <b>dekripsi</b>:</p>
+      <div class="button-container">
+        <button id="goAffine" class="choice-button">Affine Cipher</button>
+        <button id="goPlayfair" class="choice-button secondary">Playfair Cipher</button>
+      </div>
+
+      <p class="footer-note">Secure &amp; Encrypted<span></span></p>
+    </div>
+  </section>
+
+  <!-- ==== AFFINE PAGE ==== -->
+  <section id="pageAffine" class="page-wrapper">
+    <div class="page-header">
+      <h1>Affine Cipher</h1>
+      <button class="back-button" onclick="showPage('pageHome')">← Kembali</button>
+    </div>
+
+    <div class="container">
+      <div class="card">
+        <h2>Kontrol</h2>
+        <label for="affineText">Plaintext / Ciphertext</label>
+        <textarea id="affineText" placeholder="Masukkan teks..."></textarea>
+
+        <div style="display:grid;gap:10px;grid-template-columns:repeat(3,1fr)">
+          <div><label>Kunci a</label><input id="affineA" type="number"></div>
+          <div><label>Kunci b</label><input id="affineB" type="number"></div>
+          <div><label>Mode</label>
+            <select id="affineMode"><option value="encrypt">Enkripsi</option><option value="decrypt">Dekripsi</option></select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn" onclick="processAffine()">Proses</button>
+          <button class="btn secondary" onclick="reverseAffine()">⇄ Balik</button>
+          <label class="btn file" for="affineFile">Pilih File</label>
+          <input type="file" id="affineFile" style="display:none">
+          <button class="btn file" onclick="processAffineFile()">Proses File</button>
+        </div>
+        <p class="muted">Rumus: (ax + b) mod 26 · a⁻¹(x − b) mod 26</p>
+      </div>
+
+      <div class="card">
+        <h2>Hasil & Langkah</h2>
+        <div id="affineResultBox" class="result-box" style="display:none">
+          <div class="result-title">🔎 Hasil Affine Cipher</div>
+          <div id="affineResult" class="result-text" style="margin-bottom:8px"></div>
+          <div id="affineSummary" class="muted" style="margin-bottom:10px"></div>
+          <div style="font-weight:800;margin:8px 0 8px;color:#cbd5e1">Langkah per karakter</div>
+          <div style="overflow:auto;max-height:420px;border:1px solid #1f2937;border-radius:12px">
+            <table id="affineSteps"><thead><tr><th>Karakter</th><th>x</th><th>Rumus</th><th>Hasil</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div id="affineEmpty" class="muted">-- belum ada hasil --</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==== PLAYFAIR PAGE ==== -->
+  <section id="pagePlayfair" class="page-wrapper">
+    <div class="page-header">
+      <h1>Playfair Cipher</h1>
+      <button class="back-button" onclick="showPage('pageHome')">← Kembali</button>
+    </div>
+
+    <div class="container">
+      <div class="card">
+        <h2>Kontrol</h2>
+        <label>Plaintext / Ciphertext</label>
+        <textarea id="playfairText" placeholder="Masukkan teks..."></textarea>
+        <div style="display:grid;gap:10px;grid-template-columns:2fr 1fr">
+          <div><label>Kunci</label><input id="playfairKey" type="text" placeholder="Kunci"></div>
+          <div><label>Mode</label>
+            <select id="playfairMode"><option value="encrypt">Enkripsi</option><option value="decrypt">Dekripsi</option></select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn" onclick="processPlayfair()">Proses</button>
+          <button class="btn secondary" onclick="reversePlayfair()">⇄ Balik</button>
+          <label class="btn file" for="playfairFile">Pilih File</label>
+          <input type="file" id="playfairFile" style="display:none">
+          <button class="btn file" onclick="processPlayfairFile()">Proses File</button>
+        </div>
+        <p class="muted">Playfair mengenkripsi bigram 5×5 (J→I).</p>
+      </div>
+
+      <div class="card">
+        <h2>Matriks & Hasil</h2>
+        <div id="matrixBox" class="result-box" style="display:none">
+          <div class="result-title">Matriks Kunci 5×5</div>
+          <div id="matrixTable" class="grid-matrix" style="margin-bottom:8px"></div>
+        </div>
+        <div id="playfairResultBox" class="result-box" style="display:none">
+          <div class="result-title">🔎 Hasil Playfair Cipher</div>
+          <div id="playfairResult" class="result-text" style="margin-bottom:8px"></div>
+          <div id="playfairSummary" class="muted" style="margin-bottom:10px"></div>
+          <div style="font-weight:800;margin:8px 0 8px;color:#cbd5e1">Langkah tiap pasangan</div>
+          <div style="overflow:auto;max-height:420px;border:1px solid #1f2937;border-radius:12px">
+            <table id="playfairSteps"><thead><tr><th>Pasangan</th><th>Aturan</th><th>Hasil</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div id="playfairEmpty" class="muted">-- belum ada hasil --</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const sections=document.querySelectorAll('.page-wrapper,.home-wrapper');
+    function showPage(id){
+      sections.forEach(s=>s.style.display='none');
+      document.getElementById(id).style.display=id==='pageHome'?'flex':'block';
+    }
+    document.getElementById('goAffine').onclick=()=>showPage('pageAffine');
+    document.getElementById('goPlayfair').onclick=()=>showPage('pagePlayfair');
+
+    /* ===== AFFINE ===== */
+    const ALPHA="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const gcd=(a,b)=>b==0?a:gcd(b,a%b);
+    function modInverse(a,m){a%=m;for(let x=1;x<m;x++)if((a*x)%m===1)return x;throw"tidak ada invers";}
+    function affineCipher(text,a,b,mode){
+      if(gcd(a,26)!==1){alert("Nilai a harus relatif prima terhadap 26!");return{result:"",steps:[]};}
+      let res="",steps=[];
+      for(let ch of text){
+        const c=ch.toUpperCase();
+        if(ALPHA.includes(c)){
+          const x=ALPHA.indexOf(c);
+          let y,calc;
+          if(mode==="encrypt"){y=(a*x+b)%26;calc=`(${a}×${x}+${b}) mod 26 = ${y}`;}
+          else{const inv=modInverse(a,26);y=(inv*(x-b+26))%26;calc=`(${inv}×(${x}-${b})) mod 26 = ${y}`;}
+          const out=ALPHA[y];
+          res+=ch===ch.toUpperCase()?out:out.toLowerCase();
+          steps.push({char:ch,x,calc,out});
+        }else res+=ch;
+      }return{result:res,steps};
+    }
+    function processAffine(){
+      const text=document.getElementById("affineText").value;
+      const a=parseInt(document.getElementById("affineA").value);
+      const b=parseInt(document.getElementById("affineB").value);
+      const mode=document.getElementById("affineMode").value;
+      const {result,steps}=affineCipher(text,a,b,mode);
+      document.getElementById("affineResult").textContent=result;
+      document.getElementById("affineSummary").innerHTML=
+        `<b>Teks asli:</b> ${text||"-"}<br><b>Mode:</b> ${mode}<br><b>Kunci:</b> (${a||"-"}, ${b||"-"})<br><b>Hasil:</b> ${result||"-"}`;
+      const tbody=document.querySelector("#affineSteps tbody");tbody.innerHTML="";
+      steps.forEach(s=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${s.char}</td><td>${s.x}</td><td>${s.calc}</td><td>${s.out}</td>`;tbody.appendChild(tr);});
+      document.getElementById("affineEmpty").style.display="none";
+      document.getElementById("affineResultBox").style.display="block";
+    }
+    function reverseAffine(){
+      const modeEl=document.getElementById("affineMode");
+      const result=document.getElementById("affineResult").textContent.trim();
+      if(result) document.getElementById("affineText").value=result;
+      modeEl.value=modeEl.value==="encrypt"?"decrypt":"encrypt";
+      processAffine();
+    }
+    function processAffineFile(){
+      const f=document.getElementById("affineFile").files[0];
+      if(!f) return alert("Pilih file terlebih dahulu!");
+      const r=new FileReader();r.onload=()=>{document.getElementById("affineText").value=r.result;processAffine();};r.readAsText(f);
+    }
+
+    /* ===== PLAYFAIR ===== */
+    function createMatrix(key){
+      key=key.toUpperCase().replace(/J/g,"I");
+      let seen="",letters=ALPHA.replace("J","");
+      for(let ch of key+letters) if(!seen.includes(ch)&&/[A-Z]/.test(ch)) seen+=ch;
+      return Array.from({length:5},(_,i)=>seen.slice(i*5,i*5+5).split(""));
+    }
+    function findPos(m,ch){for(let i=0;i<5;i++)for(let j=0;j<5;j++)if(m[i][j]===ch)return[i,j];return[0,0];}
+    function playfairCipher(text,key,mode){
+      const m=createMatrix(key);
+      let pairs=[],res="",steps=[];
+      text=text.toUpperCase().replace(/J/g,"I").replace(/[^A-Z]/g,"");
+      for(let i=0;i<text.length;i+=2){
+        let a=text[i],b=text[i+1]||"X";
+        if(a===b){b="X";i--;}
+        pairs.push([a,b]);
+      }
+      for(let [a,b] of pairs){
+        const[r1,c1]=findPos(m,a),[r2,c2]=findPos(m,b);
+        let o1,o2,rule;
+        if(r1===r2){o1=m[r1][(c1+(mode==="encrypt"?1:4))%5];o2=m[r2][(c2+(mode==="encrypt"?1:4))%5];rule=`Baris sama → geser ${mode==="encrypt"?"kanan":"kiri"}`;}
+        else if(c1===c2){o1=m[(r1+(mode==="encrypt"?1:4))%5][c1];o2=m[(r2+(mode==="encrypt"?1:4))%5][c2];rule=`Kolom sama → geser ${mode==="encrypt"?"bawah":"atas"}`;}
+        else{o1=m[r1][c2];o2=m[r2][c1];rule="Bentuk persegi → tukar kolom";}
+        res+=o1+o2;steps.push({pair:a+b,rule,out:o1+o2});
+      }
+      return{result:res,steps,matrix:m};
+    }
+    function processPlayfair(){
+      const text=document.getElementById("playfairText").value;
+      const key=document.getElementById("playfairKey").value;
+      const mode=document.getElementById("playfairMode").value;
+      const {result,steps,matrix}=playfairCipher(text,key,mode);
+      document.getElementById("playfairResult").textContent=result;
+      document.getElementById("playfairSummary").innerHTML=
+        `<b>Teks asli:</b> ${text||"-"}<br><b>Mode:</b> ${mode}<br><b>Kunci:</b> ${key||"-"}<br><b>Hasil:</b> ${result||"-"}`;
+      const tbody=document.querySelector("#playfairSteps tbody");tbody.innerHTML="";
+      steps.forEach(s=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${s.pair}</td><td>${s.rule}</td><td>${s.out}</td>`;tbody.appendChild(tr);});
+      const grid=document.getElementById("matrixTable");grid.innerHTML="";matrix.flat().forEach(c=>{const d=document.createElement('div');d.textContent=c;grid.appendChild(d);});
+      document.getElementById("playfairEmpty").style.display="none";
+      document.getElementById("matrixBox").style.display="block";
+      document.getElementById("playfairResultBox").style.display="block";
+    }
+    function reversePlayfair(){
+      const modeEl=document.getElementById("playfairMode");
+      const result=document.getElementById("playfairResult").textContent.trim();
+      if(result) document.getElementById("playfairText").value=result;
+      modeEl.value=modeEl.value==="encrypt"?"decrypt":"encrypt";
+      processPlayfair();
+    }
+    function processPlayfairFile(){
+      const f=document.getElementById("playfairFile").files[0];
+      if(!f) return alert("Pilih file terlebih dahulu!");
+      const r=new FileReader();r.onload=()=>{document.getElementById("playfairText").value=r.result;processPlayfair();};r.readAsText(f);
+    }
+    showPage('pageHome');
+  </script>
+</body>
+</html>
